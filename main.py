@@ -19,7 +19,7 @@ def image_process(path):
     scaled_path = Path(path).stem + "_scaled" + Path(path).suffix
     scaled_path__ = Path(scaled_path)
     if not scaled_path__.is_file():
-        waifu2x_path = "/home/oud/Documents/waifu2x-ncnn-vulkan-20210521-ubuntu/waifu2x-ncnn-vulkan"
+        waifu2x_path = "{YOUR OWN DIRECTORY}"
         scaled_path = image_processor.run_waifu_2x(image_path=path, waifu2x_path=waifu2x_path)
     else:
         logging.info("waifu skipped")
@@ -39,12 +39,8 @@ def image_process(path):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    # img_path = "93131590_p1.png"
-    # image_process(img_path)
-
-    background = Image.open("97640452_p1_scaled.png")
-    foreground = Image.open("97628614_p0.jpg")
-    image_processor.mix_image("test.png", foreground, background, save=True)
+    img_path = "{YOUR IMAGE DIRECTORY}"
+    image_process(img_path)
 
     # blur.image_edgy_blur(img_path, save=True)
 
