@@ -55,9 +55,9 @@ def blur_image_edge(path: str = None,
         name = path
 
     if save:
-        background.save(f"{Path(name).stem}_edgy_blurred{Path(name).suffix}", quality=100)
+        background.save(Path(name).with_stem(Path(name).stem + "_edgy_blurred"), quality=100)
 
-    background.filename = f"{Path(name).stem}_edgy_blurred{Path(name).suffix}"
+    background.filename = Path(name).with_stem(Path(name).stem + "_edgy_blurred")
     logging.info(background.filename)
     return background
 
@@ -71,15 +71,15 @@ def blur_image(path: str = None, image: Image = None, blur_radius: int = 16, sav
         original_image = image
     blurred_image = original_image.filter(ImageFilter.GaussianBlur(radius=blur_radius))
 
-    if isinstance(image.filename, str):
+    if image.filename is not None:
         name = image.filename
     else:
         name = path
 
     if save:
-        blurred_image.save(f"{Path(name).stem}_blurred.png", quality=100)
+        blurred_image.save(Path(name).with_stem(Path(name).stem + "_blurred"), quality=100)
 
-    blurred_image.filename = f"{Path(name).stem}_blurred.png"
+    blurred_image.filename = Path(name).with_stem(Path(name).stem + "_blurred")
     logging.info(blurred_image.filename)
     return blurred_image
 
@@ -95,7 +95,7 @@ def crop_image(path: str = None, image: Image = None, save: bool = False):
     else:
         image = image
 
-    if isinstance(image.filename, str):
+    if image.filename is not None:
         name = image.filename
     else:
         name = path
@@ -119,9 +119,9 @@ def crop_image(path: str = None, image: Image = None, save: bool = False):
         image = image.crop((0, int((height - hk) / 2), width, height - int((height - hk) / 2)))
 
     if save:
-        image.save(f"{Path(name).stem}_cropped{Path(name).suffix}", quality=100)
+        image.save(Path(name).with_stem(Path(name).stem + "_cropped"), quality=100)
 
-    image.filename = f"{Path(name).stem}_cropped{Path(name).suffix}"
+    image.filename = Path(name).with_stem(Path(name).stem + "_cropped")
     logging.info(image.filename)
     return image
 
@@ -144,8 +144,8 @@ def mix_image(name: str, foreground: Image, background: Image, save: bool = Fals
         background.paste(foreground, (offset, 0))
     logging.info(f"image_mix: offset = {offset}")
     if save:
-        background.save(f"{Path(name).stem}_mixed.png", quality=100)
-    background.filename = f"{Path(name).stem}_mixed.png"
+        background.save(Path(name).with_name(Path(name).stem + "_mixed.png"), quality=100)
+    background.filename = Path(name).with_name(Path(name).stem + "_mixed.png")
     logging.info(background.filename)
     return background
 
@@ -173,12 +173,12 @@ def run_waifu_2x(image_path, waifu2x_path, scale_size: int = None):
                      "-i",
                      abs_path,
                      "-o",
-                     Path(abs_path).stem + "_scaled" + Path(abs_path).suffix,
+                     Path(abs_path).with_stem(Path(abs_path).stem + "_scaled"),
                      "-s",
                      str(scale_size),
                      "-g",
                      "0"])
-    return Path(abs_path).stem + "_scaled" + Path(abs_path).suffix
+    return Path(image_path).with_stem(Path(image_path).stem + "_scaled")
 
 
 def calculate_scale_level(path):
